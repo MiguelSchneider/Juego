@@ -15,14 +15,11 @@ b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
 world = new b2World(new b2Vec2(0, 20), true);
 
 
-// Size of canvas
-var _cw = canvasDebug.width; 
-var _ch = canvasDebug.height;
 
 
 // Touch positions
-var posX = null;//= _cw*.5;
-var posY = null; //= _ch*.2;
+var posX = null;
+var posY = null; 
 var posXf = null;
 var posYf = null;
 
@@ -30,15 +27,12 @@ var posYf = null;
 var FPS = 60;
 
 // Define the canvas
-var canvaselem = document.getElementById("canvasDebug");
-var context = canvaselem.getContext("2d");
+var context = document.getElementById("canvasDebug").getContext("2d");
+var debugDraw = new b2DebugDraw();
 var fixture = new b2FixtureDef;
 
-//var wallImage = new Image();
-var initImage = new Image();
-//var floorImage = new Image();
 
-var BackgroundImage = null;//new Image();
+var BackgroundImage = null;
 
 var myTimer;
 var stars = 0;
@@ -52,10 +46,6 @@ var ball={
 	CenterY:null
 }
 
-
-
-var debugDraw = new b2DebugDraw();
-// Objeto de visualizaciÃ³n de depuraciÃ³n
 
 // -1: Initial position of launching ball
 // 0: white space
@@ -105,7 +95,24 @@ var Levels = new Array (
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		],
 
-
+		[
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 3, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 3, 0, 0, 0, 2, 0, 2, 1], 
+		 [1, 0, 1, 0, 0, 0, 2, 0, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 1, 1, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, -1, 0, 0, 1], 
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+		],
 
 		[
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
@@ -201,6 +208,7 @@ var gameObjects = new Array (
 
 
 function init() {
+	var initImage = new Image();
 
 	function loadImages(sources, callback) {
 		var images = {};
@@ -243,9 +251,6 @@ function init() {
 				}
 		}
 
-		//console.log("Level: "+Levels[LEVEL]);
-		//console.log("Center is at: "+Levels[LEVEL].indexOf(-1));
-
 		var i,j;
 		for( i = 0; i < Levels[LEVEL].length; i++) 
 			for( j = 0; j < Levels[LEVEL][i].length; j++) {
@@ -255,7 +260,6 @@ function init() {
 					ball.CenterY=i;
 				}
 			}
-		//console.log("Center in="+ball.CenterX+"  "+ball.CenterY);
 
 		context.save();
 		context.globalAlpha = 0.4;
@@ -356,13 +360,13 @@ function loop() {
 			world.DrawDebugData();
 		else {
 		}
-		context.drawImage(BackgroundImage, 0,0);
+		if (BackgroundImage)
+			context.drawImage(BackgroundImage, 0,0);
 
-
+		// Draw the guide
 		if(posXf != null) {
 			context.strokeStyle = "#00FF00";
 			context.beginPath();
-			// context.moveTo(posX, posY);
 			posX=ball.CenterX;
 			posY=ball.CenterY;
 			context.moveTo(ball.CenterX*30, ball.CenterY*30); 
@@ -378,17 +382,12 @@ function loop() {
 
 		movingObjects=0;
 
-
 		while(node) {
 			var b = node;
 			node = node.GetNext();
 			
 			if(b.m_userData) {
-				/*
-				if (node)
-				if (!node.IsAwake())
-					movingObjects++;
-				*/
+
 				switch (b.m_userData.type) {
 					case "star":
 						stars++;
@@ -397,7 +396,9 @@ function loop() {
 						while(edge) {
 							var other = edge.other;
 
-							if(other.m_userData.type == "star") {
+							if(other.m_userData.type == "star")
+							    {
+								//console.log(other);
 								world.DestroyBody(other);
 							}
 							edge = edge.next;
@@ -419,6 +420,12 @@ function loop() {
 
 			}
 		}
+		if (checkAllBodiesStopped() && stars >0 && launchedBalls==MAX_BALLS){
+			launchedBalls++;
+			window.dispatchEvent(new CustomEvent("processBalls", {"detail":{"BALLS":0}}));
+		}
+
+
 
 		if (stars == 0 ) {
 			if (myTimer)
@@ -481,6 +488,23 @@ function run(e){
 }
 
 
+
+function checkAllBodiesStopped() {
+	var isAllBodiesStationary = true;
+
+	var node = world.GetBodyList();
+	while(node) {
+		var b = node;
+		node = node.GetNext();
+		if (b.m_linearVelocity.LengthSquared() > 0.01) {
+			isAllBodiesStationary = false;
+			break;
+		}
+	}
+	return isAllBodiesStationary;
+}
+
+
 window.addEventListener("processBalls", function(e) { processBalls(e) });
 
 function processBalls(e) {
@@ -496,19 +520,25 @@ function processBalls(e) {
 	//console.log("Launched Balls (INIT)= "+launchedBalls);
 	launchedBalls++;
 	//console.log(launchedBalls);
+
+
+
 	if (launchedBalls > MAX_BALLS) {
-		document.getElementById("failedLevel").style.display='';
-		launchedBalls=0;
-		clearInterval(myTimer);
-		var node = world.GetBodyList();
-		while(node) {
-			var b = node;
-			node = node.GetNext();
-			world.DestroyBody(b);
-		}
-		init();
-		createLevel(Levels[LEVEL]);
-		myTimer= setInterval(function() {loop();}, 1000 / FPS);
+
+		//if (isAllBodiesStationary) {
+			document.getElementById("failedLevel").style.display='';
+			launchedBalls=0;
+			clearInterval(myTimer);
+			var node = world.GetBodyList();
+			while(node) {
+				var b = node;
+				node = node.GetNext();
+				world.DestroyBody(b);
+			}
+			init();
+			createLevel(Levels[LEVEL]);
+			myTimer= setInterval(function() {loop();}, 1000 / FPS);
+		//}
 	} 
 
 	var ballDiv=document.getElementById("balls");
@@ -562,10 +592,6 @@ function endDrag(e){
 	var difY = posYf - posY*30-15;
 	var ballDef = new b2BodyDef;
 	ballDef.type = b2Body.b2_dynamicBody;
-	
-	//console.log ("CENTER XY= "+ posX + "Y="+posXf);
-	//console.log ("CANVAS CENTER XY= ", _cw * 0.5 / 30, _ch * 0.2 / 30);
-	//ballDef.position.Set(_cw * 0.5 / 30, _ch * 0.2 / 30);
 	ballDef.position.Set(posX, posY);
 
 

@@ -71,8 +71,11 @@
 		height:10%;
 		position: absolute;
 		top:0.1em;
-		left: 9em;
+		left: 6em;
 	}
+	#balls img {
+    	height: 1.5em;
+    }
 	.info {
 	    background: none repeat scroll 0 0 #FFCC00;
 	    border-radius: 9px;
@@ -87,9 +90,19 @@
 	    top: 20%;
 	    font-style: italic;
 	    color: white;
+	    transition-property: top;
+ 		transition-duration: 1s;
+		transition-timing-function: linear;
 	}
 
-	#panel {
+	.info:hover {
+	    /* top: 60%; */
+	}
+
+	.panel {
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
 		background-color: white;
@@ -108,17 +121,18 @@
 
 <div id="main" class="panel" >
 	<div  class="info"> 
-		<p> Drag the ball and get all the stars </p>				
+		<p> Drag the ball and get all the stars </p>
 		<button class="button" onclick=run({"detail":{'NEW_LEVEL':0}});> PLAY</button> 
+		</p>				
 	</div>
 </div>
 
 
-<div id="passedLevel" class="panel" style="display:none">
+<div id="passedLevel" class="panel" style="visibility:hidden">
 	<div class="info"> 
 		<p> Well done! </p>	
-		<button class="button sym"  onclick='document.getElementById("passedLevel").style.display="none"; runLevel(LEVEL)'><span class="sym">J</span></button> 
-		<button class="button" onclick='document.getElementById("passedLevel").style.display="none"; runLevel(LEVEL+1)'> <span class="sym">j</span></button> </button> 
+		<button class="button sym"  onclick='document.getElementById("passedLevel").style.visibility="hidden"; runLevel(LEVEL)'><span class="sym">J</span></button> 
+		<button class="button" onclick='document.getElementById("passedLevel").style.visibility="hidden"; runLevel(LEVEL+1)'> <span class="sym">j</span></button> </button> 
 
 	</div>
 </div>

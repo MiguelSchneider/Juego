@@ -358,8 +358,7 @@ function loop() {
 
 		if(debug)
 			world.DrawDebugData();
-		else {
-		}
+		else 
 		if (BackgroundImage)
 			context.drawImage(BackgroundImage, 0,0);
 
@@ -395,12 +394,8 @@ function loop() {
 						var edge = b.GetContactList();
 						while(edge) {
 							var other = edge.other;
-
-							if(other.m_userData.type == "star")
-							    {
-								//console.log(other);
+							if(other.m_userData.type == "star" && edge.contact.IsTouching()) 
 								world.DestroyBody(other);
-							}
 							edge = edge.next;
 						}
 					case "block":
@@ -409,12 +404,14 @@ function loop() {
 						var imgObj = new Image();
 						imgObj.src = b.m_userData.imgsrc;
 
-						context.save();
-						context.translate(position.x * 30, position.y * 30);
-						context.rotate(b.GetAngle());
-						context.translate(-position.x * 30, -position.y * 30);
-						context.drawImage(imgObj, position.x * 30 - 15, position.y * 30 - 15);
-						context.restore();
+						if (!debug) {
+							context.save();
+							context.translate(position.x * 30, position.y * 30);
+							context.rotate(b.GetAngle());
+							context.translate(-position.x * 30, -position.y * 30);
+							context.drawImage(imgObj, position.x * 30 - 15, position.y * 30 - 15);
+							context.restore();
+						}
 					break;
 				}
 
@@ -430,7 +427,9 @@ function loop() {
 		if (stars == 0 ) {
 			if (myTimer)
 				clearInterval(myTimer);
-			document.getElementById("passedLevel").style.display='';
+			//document.getElementById("passedLevel").classList.remove('panel');
+			//document.getElementById("passedLevel").classList.add('info_move');
+			document.getElementById("passedLevel").style.visibility='';
 			return true;
 		} else return false;
 }
@@ -514,8 +513,8 @@ function processBalls(e) {
 	if (BALLS == MAX_BALLS) {
 		launchedBalls=-1;
 	}
-	console.log("Balls from Event="+BALLS);
-	console.log("Launched Balls="+launchedBalls);
+	//console.log("Balls from Event="+BALLS);
+	//console.log("Launched Balls="+launchedBalls);
 
 	//console.log("Launched Balls (INIT)= "+launchedBalls);
 	launchedBalls++;
@@ -524,21 +523,18 @@ function processBalls(e) {
 
 
 	if (launchedBalls > MAX_BALLS) {
-
-		//if (isAllBodiesStationary) {
-			document.getElementById("failedLevel").style.display='';
-			launchedBalls=0;
-			clearInterval(myTimer);
-			var node = world.GetBodyList();
-			while(node) {
-				var b = node;
-				node = node.GetNext();
-				world.DestroyBody(b);
-			}
-			init();
-			createLevel(Levels[LEVEL]);
-			myTimer= setInterval(function() {loop();}, 1000 / FPS);
-		//}
+		document.getElementById("failedLevel").style.display='';
+		launchedBalls=0;
+		clearInterval(myTimer);
+		var node = world.GetBodyList();
+		while(node) {
+		var b = node;
+			node = node.GetNext();
+			world.DestroyBody(b);
+		}
+		init();
+		createLevel(Levels[LEVEL]);
+		myTimer= setInterval(function() {loop();}, 1000 / FPS);	
 	} 
 
 	var ballDiv=document.getElementById("balls");
@@ -548,7 +544,7 @@ function processBalls(e) {
 		im.src = "images/emotion.png";
 		ballDiv.appendChild(im);
 	}
-	console.log("MAX-Launched=",MAX_BALLS - launchedBalls);	
+	//console.log("MAX-Launched=",MAX_BALLS - launchedBalls);	
 }
 //run({"detail":{"NEW_LEVEL":LEVEL}});
 
@@ -561,74 +557,70 @@ function processBalls(e) {
 //
 //////////////////////
 //////////////////////
+var dragStarted=false;
 
 function beginDrag(e) {
-    e.preventDefault();
-    //console.log("LAUNCHING BALL");
-	window.dispatchEvent(new CustomEvent("processBalls", {"detail":{"BALLS":0}}));
-
+	    e.preventDefault();
+	    //if (dragStarted)
+			// window.dispatchEvent(new CustomEvent("processBalls", {"detail":{"BALLS":0}}));
 }
+	
 
 function dragging(e) {
-	if (e.changedTouches) {
-		posXf = e.changedTouches[0].pageX - this.offsetLeft;
-		posYf = e.changedTouches[0].pageY - this.offsetTop;
-	} else {
-		posXf = e.pageX;
-		posYf = e.pageY;
-	}
+	    e.preventDefault();
+	    dragStarted = true;
+		if (e.changedTouches) {
+			posXf = e.changedTouches[0].pageX - this.offsetLeft;
+			posYf = e.changedTouches[0].pageY - this.offsetTop;
+		} else {
+			posXf = e.pageX;
+			posYf = e.pageY;
+		}
 }
-
 function endDrag(e){
-	if (e.changedTouches) {
-		posXf = e.changedTouches[0].pageX - this.offsetLeft;
-		posYf = e.changedTouches[0].pageY - this.offsetTop;
-	} else {
-		posXf = e.pageX;
-		posYf = e.pageY;
-	}
+	    e.preventDefault();
+	    if (dragStarted){
+		    dragStarted = false;
+			if (e.changedTouches) {
+				posXf = e.changedTouches[0].pageX - this.offsetLeft;
+				posYf = e.changedTouches[0].pageY - this.offsetTop;
+			} else {
+				posXf = e.pageX;
+				posYf = e.pageY;
+			}
 
-	var difX = posXf - posX*30-15;
-	var difY = posYf - posY*30-15;
-	var ballDef = new b2BodyDef;
-	ballDef.type = b2Body.b2_dynamicBody;
-	ballDef.position.Set(posX, posY);
+			var difX = posXf - posX*30-15;
+			var difY = posYf - posY*30-15;
+			var ballDef = new b2BodyDef;
+			ballDef.type = b2Body.b2_dynamicBody;
+			ballDef.position.Set(posX, posY);
 
+			var data = {
+				imgsrc : 'images/emotion.png',
+				//imgsize: imgsize,
+				//bodysize: scale,
+				type : "ball"
+			}
+			ballDef.userData = data;
 
-	//ballDef.position.Set(ball.CenterX, ball.CenterY);
-	
-	// context.drawImage(initImage,ball.CenterX*30-15, ball.CenterY*30-15);
+			var fixture = new b2FixtureDef;
+			fixture.density = 10;
+			fixture.friction = 0.5;
+			fixture.restitution = 0.3;
+			fixture.shape = new b2CircleShape(15 / 30);
 
+			var ball = world.CreateBody(ballDef)
+			ball.CreateFixture(fixture);
 
-	var data = {
-		imgsrc : 'images/emotion.png',
-		//imgsize: imgsize,
-		//bodysize: scale,
-		type : "ball"
-	}
-	ballDef.userData = data;
+			var velocityFactor = .1;
 
-	var fixture = new b2FixtureDef;
-	fixture.density = 10;
-	fixture.friction = 0.5;
-	fixture.restitution = 0.3;
-	fixture.shape = new b2CircleShape(15 / 30);
-	// Establecemos el radio (1m=30px)
+			ball.SetLinearVelocity(new b2Vec2(difX * velocityFactor, difY * velocityFactor))
 
-	var ball = world.CreateBody(ballDef)
-	ball.CreateFixture(fixture);
+			posXf = null;
+			posYf = null;
+			window.dispatchEvent(new CustomEvent("processBalls", {"detail":{"BALLS":0}}));
 
-	var velocityFactor = .1;
-
-	ball.SetLinearVelocity(new b2Vec2(difX * velocityFactor, difY * velocityFactor))
-
-	//balls.push(ball);
-	posXf = null;
-	posYf = null;
-
-
-
-
+	    }
 }
 
 canvasDebug.addEventListener('touchstart', beginDrag, false);
@@ -638,6 +630,7 @@ canvasDebug.addEventListener('touchend', endDrag, false);
 canvasDebug.addEventListener('mousedown', beginDrag, false);
 canvasDebug.addEventListener('mousemove', dragging, false);
 canvasDebug.addEventListener('mouseup', endDrag, false);
+
 /*
 
 // FPS counter

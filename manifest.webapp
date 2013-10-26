@@ -9,7 +9,10 @@
   "installs_allowed_from": [
     "*"
   ],
-  "permissions": {},
+  "permissions": {
+    "storage" : {},
+    "audio-channel-normal":{}
+  },
   "default_locale": "en-US",
   "icons": {
     "128": "/images/icons/Icon.png"

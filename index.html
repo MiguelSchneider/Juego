@@ -2,7 +2,9 @@
 <html>
 <head>
 <script src="scripts/Box2dWeb-2.1.a.3.min.js"></script>
-
+<!--
+<link href="css/panes.css" rel="stylesheet" type="text/css">
+-->
 <style type="text/css">
 	@font-face {
 		font-family: WebSymbol;
@@ -70,8 +72,8 @@
 	#balls {
 		height:10%;
 		position: absolute;
-		top:0.1em;
-		left: 6em;
+		top:0.3em;
+		left: 0.2em;
 	}
 	#balls img {
     	height: 1.5em;
@@ -91,13 +93,14 @@
 	    font-style: italic;
 	    color: white;
 	    transition-property: top;
- 		transition-duration: 1s;
+ 		transition-duration: 0.5s;
 		transition-timing-function: linear;
 	}
-
-	.info:hover {
-	    /* top: 60%; */
+	.info_move {
+		top:30%;
 	}
+
+
 
 	.panel {
 		position: absolute;
@@ -108,31 +111,110 @@
 		background-color: white;
 	}
 
+	#menu.info {
+	    height: 80%;
+	    top: 10%;
+	}
+	.mini_level {
+	    /* background-color: #008000; */
+	    display: inline-block;
+	    list-style: none outside none;
+	    margin: 0;
+	    padding: 0;
+	    width: 100%;
+	}
+	.mini_level li {
+	    background-color: #D80000;
+	    border-style: inset;
+	    float: left;
+	    height: 70px;
+	    margin-left: 2.7%;
+	    padding: 0;
+	    vertical-align: top;
+	    width: 27%;
+	    border-radius: 15px 0px;
+	    border-color: #005F00;
+	}
+	.mini_level li img {
+		width: 25%;
+		top: -25px;
+		position: relative;
+		margin: 0;
+		padding: 0;	
+	}	
 
+	.mini_level li p {
+		font-size: 0.8em;
+		font-style: italic;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		top: 60%;
+	}
+	#controls .button {
+	    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	    border: medium none;
+	    border-radius: 0;
+	    box-shadow: none;
+	    color: #FFCC00;
+	    font-family: WebSymbol;
+	    font-weight: normal;
+	    height: 2em;
+	    line-height: 1.8em;
+	    text-shadow: 1px 0px #AAAAAA;
+	    width: 2em;
+	    font-size: 1.6em;
+	}
+	#controls {
+	    left: 61%;
+	    position: absolute;
+	    top: -0.4em;
+	}
 </style>
 </head>
-<body style='background: #f4f4f4;margin:0px'>
+<body style='background: #f4f4f4;margin:0px' onload="initMenu()">
 <!--
 <div id="FPS" style="top:0; left:0; width:100px; height:30px; "></div>
 -->
-<div id="level"></div>
-<div id="balls"> </div>
+<div id="head">
+	<div id="controls">
+		<button class="button sym" onclick='if (myTimer)
+				clearInterval(myTimer); stars=0; runLevel(LEVEL);'> *
+		</button> 
+				<button class="button sym" onclick='if (myTimer)
+				clearInterval(myTimer); stars=0; initMenu();'> p
+		</button> 
+	</div>
+	<div id="level" style="visibility:hidden"></div>
+	<div id="balls"> </div>
+</div>
 <canvas id="canvasDebug" width='320' height='480' ></canvas>
+
+
+
+<div class="panel" >
+	<div id="menu" class="info"> 
+	</div>
+	<audio id="menuAudio">
+	  <source src="audio/menu_music.ogg" type="audio/ogg">
+	</audio> 
+</div>
 
 <div id="main" class="panel" >
 	<div  class="info"> 
 		<p> Drag the ball and get all the stars </p>
-		<button class="button" onclick=run({"detail":{'NEW_LEVEL':0}});> PLAY</button> 
+		<button class="button" onclick='document.getElementById("main").style.visibility="hidden"';> PLAY</button> 
 		</p>				
 	</div>
 </div>
 
 
+
 <div id="passedLevel" class="panel" style="visibility:hidden">
-	<div class="info"> 
+	<div id="passedLevel_info" class="info"> 
 		<p> Well done! </p>	
-		<button class="button sym"  onclick='document.getElementById("passedLevel").style.visibility="hidden"; runLevel(LEVEL)'><span class="sym">J</span></button> 
-		<button class="button" onclick='document.getElementById("passedLevel").style.visibility="hidden"; runLevel(LEVEL+1)'> <span class="sym">j</span></button> </button> 
+		<button class="button sym"  onclick='document.getElementById("passedLevel").style.visibility="hidden"; document.getElementById("passedLevel_info").classList.remove("info_move"); runLevel(LEVEL)'><span class="sym">*</span></button> 
+		<button class="button" onclick='document.getElementById("passedLevel").style.visibility="hidden"; document.getElementById("passedLevel_info").classList.remove("info_move"); runLevel(LEVEL+1)'> <span class="sym">j</span></button> </button> 
 
 	</div>
 </div>

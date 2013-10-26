@@ -205,7 +205,74 @@ var gameObjects = new Array (
 //
 //////////////////////
 //////////////////////
+var audioControl=document.getElementById("menuAudio");
 
+function initMenu() {
+	function eventListener(event, I) {
+		event.preventDefault();
+		document.getElementById("menu").parentNode.style.visibility='hidden'; 
+		audioControl.pause();
+		audioControl.muted=true;
+		//console.log(audioControl.paused);
+		runLevel(I);
+	}
+	var initMenuDiv=document.getElementById("menu");
+	initMenuDiv.parentNode.style.visibility="";
+
+	//console.log("HERE");
+	if (localStorage[0]){
+		//console.log("Already created");
+	} else {
+		localStorage[0]=0;
+		localStorage[0]=0;
+	}
+	audioControl.muted=false;
+	audioControl.play();
+	audioControl.loop=true;
+
+	//console.log(initMenuDiv.getElementsByTagName('ul').length);
+	if ((initMenuDiv.getElementsByTagName('ul')).length!=0) {
+		var myNode = document.getElementById("menu");
+			while (myNode.firstChild) {
+			    myNode.removeChild(myNode.firstChild);
+			}
+	}
+	if ((initMenuDiv.getElementsByTagName('ul')).length==0) {
+		var ul = document.createElement('ul');
+		for (var i=0;i<Levels.length;i++){
+			if ((i%3)==0) {
+				initMenuDiv.appendChild(ul);
+				var ul = document.createElement('ul');
+			}
+			var li = document.createElement('li');
+			var p=document.createElement('p');
+			p.innerHTML = i;
+			li.appendChild(p);
+			li.style.opacity="0.3";
+
+			if(localStorage[i] || (localStorage[i-1] && i<=Levels.length)) {
+				(function (i) {
+					li.addEventListener('touchend', function(event) { eventListener(event, i); }, false);
+				}(i));
+				(function (i) {
+					li.addEventListener('mouseup', function(event) { eventListener(event, i); }, false);
+				}(i));
+
+				for (var j=0; j<localStorage[i]; j++) {
+					var img = document.createElement('img');
+					img.src="images/star_result_small.png";
+					li.appendChild(img);
+				}
+				li.style.opacity="1.0";
+			}
+
+			ul.classList.add('mini_level');
+			ul.appendChild(li);
+		}
+		initMenuDiv.appendChild(ul);
+	}
+
+}
 
 function init() {
 	var initImage = new Image();
@@ -364,7 +431,9 @@ function loop() {
 
 		// Draw the guide
 		if(posXf != null) {
-			context.strokeStyle = "#00FF00";
+			context.strokeStyle = "#333333";
+			context.lineWidth = 2;
+			context.lineCap = 'round';
 			context.beginPath();
 			posX=ball.CenterX;
 			posY=ball.CenterY;
@@ -427,15 +496,20 @@ function loop() {
 		if (stars == 0 ) {
 			if (myTimer)
 				clearInterval(myTimer);
-			//document.getElementById("passedLevel").classList.remove('panel');
-			//document.getElementById("passedLevel").classList.add('info_move');
+
+			document.getElementById("passedLevel_info").classList.add('info_move');
+			
 			document.getElementById("passedLevel").style.visibility='';
+
+			localStorage[LEVEL]=MAX_BALLS - launchedBalls+1;
+			//console.log("Inserted Level "+ LEVEL + "stars="+localStorage[LEVEL]);
 			return true;
 		} else return false;
 }
 
 
 function runLevel(Next_Level) {
+	//console.log("RUNNING LEVEL: "+Next_Level);
 	launchedBalls=-1;
 	LEVEL = Next_Level;
 	window.dispatchEvent(new CustomEvent("starsFinished", {"detail":{"NEW_LEVEL":Next_Level}}));
@@ -454,6 +528,7 @@ function runLevel(Next_Level) {
 window.addEventListener("starsFinished", function(e) { run(e) });
 
 function run(e){
+	//initMenu();
 	document.getElementById("main").style.display='none';
 	NEW_LEVEL= e.detail.NEW_LEVEL;
 	document.getElementById("level").innerHTML="Level: "+NEW_LEVEL;
@@ -631,6 +706,119 @@ canvasDebug.addEventListener('mousedown', beginDrag, false);
 canvasDebug.addEventListener('mousemove', dragging, false);
 canvasDebug.addEventListener('mouseup', endDrag, false);
 
+
+///// Database
+/*
+(function() {
+	var db;
+	var request;
+	var transaction;
+
+	var myDatabase = {
+		start: function(id) {
+			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+		},
+		open: function(id, success) {
+			// this.start();
+			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+			request = indexedDB.open(id,1);
+			console.log("OPENED="+id);
+			request.onsuccess = function(e) {
+				console.log("SUCCESS Opening= "+JSON.stringify(e));
+				db = request.result;
+				console.log("DATABASE ----> "+JSON.stringify(db));
+				success();
+			};
+			request.onerror = function(e) {
+			 	console.log("ERROR Acessing Database= "+e.target.errorCode);
+			};
+			request.onupgradeneeded = function(e) { 
+				console.log("CREATING= "+e.target.result);
+			  	db = e.target.result;
+
+			  	var objectStore = db.createObjectStore("Levels", { keyPath: "level" });
+			  	objectStore.createIndex("level");
+			};
+		},
+		add: function(id, success) {
+			console.log("DATABASE ----> "+JSON.stringify(db));
+			transaction = db.transaction(["Levels"], "readwrite");
+			transaction.oncomplete = function(e) {
+				console.log("All done!");
+			};
+
+			transaction.onerror = function(e) {
+				console.log("Already in the database. Error= "+e);
+			};
+			var objectStore = transaction.objectStore("Levels");
+			var request = objectStore.put(id);
+			request.onsuccess = function(e) {
+				console.log("SUCESSFULLY ADDED= "+JSON.stringify(e.target.result));
+				success();
+			  // event.target.result == customerData[i].ssn;
+			};
+		},
+		get:function(id, success) {
+			var objectStore =  db.transaction("Levels").objectStore("Levels");
+			objectStore.get(id).onsuccess =  function(e) {
+			  console.log("Result for Level "+id+" is " + JSON.stringify(e.target.result));
+			  success(this.result);
+			};
+		},
+		length: function() {
+			var objectStore = db.transaction("Levels").objectStore("Levels");
+
+			objectStore.count().onsuccess = function(e) {
+				console.log("COUNT="+JSON.stringify(this.result));
+				return this.result;
+			}
+
+		},
+
+		viewAllContent: function(success) {
+			console.log("Viewing Database Content");
+			var objectStore = db.transaction("Levels").objectStore("Levels");
+
+			objectStore.openCursor().onsuccess = function(e) {
+			    var cursor = e.target.result;
+			    if (cursor) {
+			        console.log("Level: "+cursor.key+", Score: "+cursor.value.score);
+			        success(cursor.value);
+			        cursor.continue();
+			    }
+			};
+			objectStore.openCursor().onerror = function(e) {
+				console.log("CURSOR ERROR");
+			};
+		}
+
+	}
+
+	myDatabase.open('myGameDatabase', function() {
+		var Score = {level:1, score:1};
+		var value;
+		myDatabase.add(Score, function() {
+			myDatabase.viewAllContent(function(value) {
+				console.log(value.score);
+			});
+			myDatabase.get(0, function(v){
+				value=v;
+				console.log("VALUE===> "+value.score)
+			});
+
+		});
+		
+
+	});
+
+	
+})();
+*/
 /*
 
 // FPS counter

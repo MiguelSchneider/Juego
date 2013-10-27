@@ -24,7 +24,7 @@ var posXf = null;
 var posYf = null;
 
 // Frames per Second
-var FPS = 60;
+const FPS = 60;
 
 // Define the canvas
 var context = document.getElementById("canvasDebug").getContext("2d");
@@ -38,7 +38,7 @@ var myTimer;
 var stars = 0;
 
 var LEVEL = 0;
-var MAX_BALLS = 3;
+const MAX_BALLS = 3;
 var launchedBalls=-1;
 
 var ball={
@@ -53,7 +53,7 @@ var ball={
 // 2: block
 // 3: stars
 
-var Levels = new Array (
+const Levels = new Array (
 		[
 
 
@@ -169,6 +169,78 @@ var Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 3, 3, 2, 2, 3, 3, 0, 0, 1], 
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+		],
+		[
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+		 [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 1, 0, 3, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 1, 1, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, -1, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 3, 0, 3, 0, 3, 0, 1], 
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+		],
+		[
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+		 [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 1, 0, 3, 0, 0, -1, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 1, 1, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 3, 0, 3, 0, 3, 0, 1], 
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+		],
+		[
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+		 [1, 3, 3, 3, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 3, 3, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 3, 3, 0, 0, 0, 0, 0, 1], 
+		 [1, 2, 2, 2, 0, 0, 0, 0, 0, 1], 
+		 [1, 2, 0, 2, 0, 0, 0, 0, 0, 1], 
+		 [1, 2, 0, 2, 0, 0, 0, -1, 0, 1], 
+		 [1, 2, 0, 2, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 1, 1, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 3, 3, 3, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 2, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 0, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 0, 0, 1], 
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+		],
+		[
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 3, 0, 0, 3, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 1, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 3, 2, 3, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 2, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 3, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 2, 1, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 1, 1, 1, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 0, -1, 0, 0,0, 0, 0, 0, 1], 
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		]
 		
 );
@@ -223,7 +295,6 @@ function initMenu() {
 	if (localStorage[0]){
 		//console.log("Already created");
 	} else {
-		localStorage[0]=0;
 		localStorage[0]=0;
 	}
 	audioControl.muted=false;
@@ -463,7 +534,7 @@ function loop() {
 						var edge = b.GetContactList();
 						while(edge) {
 							var other = edge.other;
-							if(other.m_userData.type == "star" && edge.contact.IsTouching()) 
+							if(b.m_userData.type == "ball" && other.m_userData.type == "star" && edge.contact.IsTouching()) 
 								world.DestroyBody(other);
 							edge = edge.next;
 						}
@@ -707,118 +778,6 @@ canvasDebug.addEventListener('mousemove', dragging, false);
 canvasDebug.addEventListener('mouseup', endDrag, false);
 
 
-///// Database
-/*
-(function() {
-	var db;
-	var request;
-	var transaction;
-
-	var myDatabase = {
-		start: function(id) {
-			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-		},
-		open: function(id, success) {
-			// this.start();
-			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
-			request = indexedDB.open(id,1);
-			console.log("OPENED="+id);
-			request.onsuccess = function(e) {
-				console.log("SUCCESS Opening= "+JSON.stringify(e));
-				db = request.result;
-				console.log("DATABASE ----> "+JSON.stringify(db));
-				success();
-			};
-			request.onerror = function(e) {
-			 	console.log("ERROR Acessing Database= "+e.target.errorCode);
-			};
-			request.onupgradeneeded = function(e) { 
-				console.log("CREATING= "+e.target.result);
-			  	db = e.target.result;
-
-			  	var objectStore = db.createObjectStore("Levels", { keyPath: "level" });
-			  	objectStore.createIndex("level");
-			};
-		},
-		add: function(id, success) {
-			console.log("DATABASE ----> "+JSON.stringify(db));
-			transaction = db.transaction(["Levels"], "readwrite");
-			transaction.oncomplete = function(e) {
-				console.log("All done!");
-			};
-
-			transaction.onerror = function(e) {
-				console.log("Already in the database. Error= "+e);
-			};
-			var objectStore = transaction.objectStore("Levels");
-			var request = objectStore.put(id);
-			request.onsuccess = function(e) {
-				console.log("SUCESSFULLY ADDED= "+JSON.stringify(e.target.result));
-				success();
-			  // event.target.result == customerData[i].ssn;
-			};
-		},
-		get:function(id, success) {
-			var objectStore =  db.transaction("Levels").objectStore("Levels");
-			objectStore.get(id).onsuccess =  function(e) {
-			  console.log("Result for Level "+id+" is " + JSON.stringify(e.target.result));
-			  success(this.result);
-			};
-		},
-		length: function() {
-			var objectStore = db.transaction("Levels").objectStore("Levels");
-
-			objectStore.count().onsuccess = function(e) {
-				console.log("COUNT="+JSON.stringify(this.result));
-				return this.result;
-			}
-
-		},
-
-		viewAllContent: function(success) {
-			console.log("Viewing Database Content");
-			var objectStore = db.transaction("Levels").objectStore("Levels");
-
-			objectStore.openCursor().onsuccess = function(e) {
-			    var cursor = e.target.result;
-			    if (cursor) {
-			        console.log("Level: "+cursor.key+", Score: "+cursor.value.score);
-			        success(cursor.value);
-			        cursor.continue();
-			    }
-			};
-			objectStore.openCursor().onerror = function(e) {
-				console.log("CURSOR ERROR");
-			};
-		}
-
-	}
-
-	myDatabase.open('myGameDatabase', function() {
-		var Score = {level:1, score:1};
-		var value;
-		myDatabase.add(Score, function() {
-			myDatabase.viewAllContent(function(value) {
-				console.log(value.score);
-			});
-			myDatabase.get(0, function(v){
-				value=v;
-				console.log("VALUE===> "+value.score)
-			});
-
-		});
-		
-
-	});
-
-	
-})();
-*/
 /*
 
 // FPS counter

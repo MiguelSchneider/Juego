@@ -278,6 +278,8 @@ var gameObjects = new Array (
 //////////////////////
 //////////////////////
 var audioControl=document.getElementById("menuAudio");
+var audioStar=document.getElementById("starAudio");
+var audioTouch=document.getElementById("touchAudio");
 
 function initMenu() {
 	function eventListener(event, I) {
@@ -534,8 +536,16 @@ function loop() {
 						var edge = b.GetContactList();
 						while(edge) {
 							var other = edge.other;
-							if(b.m_userData.type == "ball" && other.m_userData.type == "star" && edge.contact.IsTouching()) 
+							if(b.m_userData.type == "ball" && other.m_userData.type == "star" && edge.contact.IsTouching()) {
 								world.DestroyBody(other);
+								audioStar.muted=false;
+								audioStar.play();
+							} else {
+								/*
+								audioTouch.muted=false;
+								audioTouch.play();
+								*/
+							}
 							edge = edge.next;
 						}
 					case "block":

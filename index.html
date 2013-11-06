@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html manifest="cache.manifest">
 <head>
+	<title>Bouncer</title>
 <script src="scripts/Box2dWeb-2.1.a.3.min.js"></script>
-<!--
-<link href="css/panes.css" rel="stylesheet" type="text/css">
--->
+<link rel="apple-touch-icon" href="images/icons/iPhoneIcon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no">
 <style type="text/css">
 	@font-face {
 		font-family: WebSymbol;
@@ -172,7 +173,7 @@
 	}
 </style>
 </head>
-<body style='background: #f4f4f4;margin:0px' onload="initMenu()">
+<body style='background: #f4f4f4;margin:0px' onload="window.scroll(0,1);initMenu()">
 <!--
 <div id="FPS" style="top:0; left:0; width:100px; height:30px; "></div>
 -->

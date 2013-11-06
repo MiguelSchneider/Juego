@@ -1,0 +1,28 @@
+CACHE MANIFEST
+# rev 43
+index.html
+
+#Audio Files
+audio/menu_music.ogg
+audio/ouch.mp3
+audio/star.ogg
+
+#CSS
+css/animate.css
+
+#FONTS
+fonts/Della-Respira.woff
+fonts/WebSymbols-Regular.otf
+fonts/funny-font.woff
+
+#IMAGES
+images/1.png
+images/2.png
+images/3.png
+images/block.png
+images/emotion.png
+images/star_result_small.png
+
+#SCRIPTS
+scripts/Box2dWeb-2.1.a.3.min.js
+scripts/game.js

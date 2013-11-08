@@ -33,6 +33,7 @@ var fixture = new b2FixtureDef;
 
 
 var BackgroundImage = null;
+var ballImage = null;
 
 var myTimer;
 var stars = 0;
@@ -247,21 +248,27 @@ const Levels = new Array (
 
 var gameObjects = new Array (
 			{
+				description : "wall",
 				imgsrc : "images/1.png",
+				imgObj :  null,
 				imgsize : 30,
 				bodysize : null,
 				type : "wall",
 				dynamic : false
 			},
 			{
+				description : "block",
 				imgsrc : "images/2.png",
+				imgObj : null,				
 				imgsize : 30,
 				bodysize : null,
 				type : "block",
 				dynamic : true
 			},
 			{
+				description : "star",
 				imgsrc : "images/3.png",
+				imgObj : null,
 				imgsize : 30,
 				bodysize : null,
 				type : "star",
@@ -367,6 +374,9 @@ function init() {
 				}
 			};
 			images[src].src = sources[src];
+			gameObjects[src].imgObj = images[src];
+
+			//console.log(gameObjects[src].imgObj);
 		}
 	}
 
@@ -387,6 +397,7 @@ function init() {
 						var h = b.m_userData.bodysize[3] * 30;
 						context.drawImage(wallImage, (x - w), (y - h));
 						context.restore();
+						//console.log("Wall at "+ b.m_userData.bodysize);
 						break;
 				}
 		}
@@ -405,28 +416,37 @@ function init() {
 		context.globalAlpha = 0.4;
 		context.drawImage(initImage,ball.CenterX*30-15, ball.CenterY*30-15);
 		context.restore();
+		
+		ballImage = new Image();
+		ballImage=initImage;
 
 
 		var image = new Image();
 		image.src = canvasDebug.toDataURL("image/png");
 		return image;
 	}
-
+/*	
 	var wallImage = new Image();
 	wallImage.src = "images/1.png";
+*/
 	initImage.src = "images/emotion.png";
-
 
 	var imagesToLoad = {}; //declare object
 
-    for (var i = 1; i <= 3; i++) {
-    	var im='images/'+i+'.png';
+    for (var i = 0; i < 3; i++) {
+    	var index = i+1;
+    	var im='images/'+index+'.png';
     	imagesToLoad[i]=im;
+    	//console.log(gameObjects[i]);
+
+
     }
 
 	loadImages(imagesToLoad, function() {
+		var wallImage = gameObjects[0].imgObj;
 		BackgroundImage = createBackground(wallImage);
 	});
+
 
 
 	fixture.density = 10;
@@ -455,10 +475,17 @@ function init() {
 //////////////////////
 
 function createLevel(level) {
-	function clone(s) {
-		for(p in s)
-		this[p] = ( typeof (s[p]) == 'object') ? new clone(s[p]) : s[p];
+
+	function clone(obj) {
+	    if (null == obj || "object" != typeof obj) return obj;
+	    var copy = obj.constructor();
+	    for (var attr in obj) {
+	        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+	    }
+	    return copy;
 	}	
+	
+			
 	for(var i = 0; i < level.length; i++) {
 		for(var j = 0; j < level[i].length; j++) {
 			if (level[i][j]>0) {
@@ -471,9 +498,17 @@ function createLevel(level) {
 				fixture.shape.SetAsBox(.5, .5);
 
 				var a = new Array(j+.5, i+.5, .5, .5);
+				
 				var NewData = new clone(gameObjects[level[i][j]-1]);
 				NewData.bodysize = a.slice(0);
 				wallDef.userData = NewData;
+
+/*
+				var NewData = new Object();
+				NewData = eval(uneval(gameObjects[level[i][j]-1]));
+				NewData.bodysize = a.slice(0);
+				wallDef.userData = NewData;
+*/
 
 				var wall = world.CreateBody(wallDef);
 				wall.CreateFixture(fixture);
@@ -532,6 +567,7 @@ function loop() {
 				switch (b.m_userData.type) {
 					case "star":
 						stars++;
+						break;
 					case "ball":
 						var edge = b.GetContactList();
 						while(edge) {
@@ -548,7 +584,13 @@ function loop() {
 							}
 							edge = edge.next;
 						}
+						break;
 					case "block":
+
+					break;
+				}
+				if (b.m_userData.type=="star" || b.m_userData.type=="ball" || b.m_userData.type=="block") {
+									
 						var position = b.GetPosition();
 
 						var imgObj = new Image();
@@ -559,11 +601,23 @@ function loop() {
 							context.translate(position.x * 30, position.y * 30);
 							context.rotate(b.GetAngle());
 							context.translate(-position.x * 30, -position.y * 30);
-							context.drawImage(imgObj, position.x * 30 - 15, position.y * 30 - 15);
+							//context.drawImage(imgObj, position.x * 30 - 15, position.y * 30 - 15);
+							//console.log(imgObj);
+							switch (b.m_userData.type) {
+								case "star":
+									context.drawImage(gameObjects[2].imgObj, position.x * 30 - 15, position.y * 30 - 15);
+									break;
+								case "block":
+									context.drawImage(gameObjects[1].imgObj, position.x * 30 - 15, position.y * 30 - 15);
+									break;
+								case "ball":
+								//console.log(b.m_userData)
+									context.drawImage(ballImage, position.x * 30 - 15, position.y * 30 - 15);
+									break;
+							}
 							context.restore();
 						}
-					break;
-				}
+					}
 
 			}
 		}

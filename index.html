@@ -177,8 +177,17 @@
 <!--
 <div id="FPS" style="top:0; left:0; width:100px; height:30px; "></div>
 -->
+<div id="Resources" style="visibility:hidden">
+	<img src="images/1.png" />
+	<img src="images/2.png" />
+	<img src="images/3.1_30x30.png" />
+	<img src="images/block.png" />
+	<img src="images/emotion.png"/>
+	<img src="images/star_result_small.png" />
+</div>
+
 <div id="head">
-	<div id="controls">
+        <div id="controls">
 		<button class="button sym" onclick='if (myTimer)
 				clearInterval(myTimer); stars=0; runLevel(LEVEL);'> *
 		</button> 
@@ -197,9 +206,11 @@
 	<div id="menu" class="info"> 
 	</div>
 	<audio id="menuAudio">
+	  <source src="audio/menu_music.ogg" type="audio/ogg">
 	  <source src="audio/menu_music.mp3" type="audio/mp3">
 	</audio> 
 	<audio id="starAudio">
+	  <source src="audio/star.ogg" type="audio/ogg">
 	  <source src="audio/star.mp3" type="audio/mp3">
 	</audio> 
 	<audio id="touchAudio">

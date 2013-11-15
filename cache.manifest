@@ -1,11 +1,12 @@
 CACHE MANIFEST
-# rev 2
+# rev 5
 index.html
 
 #Audio Files
 audio/menu_music.mp3
-audio/ouch.mp3
 audio/star.mp3
+audio/menu_music.ogg
+audio/star.ogg
 
 #CSS
 css/animate.css

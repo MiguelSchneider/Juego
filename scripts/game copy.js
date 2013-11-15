@@ -29,7 +29,7 @@ const FPS = 60;
 // Define the canvas
 var context = document.getElementById("canvasDebug").getContext("2d");
 var debugDraw = new b2DebugDraw();
-//var fixture = new b2FixtureDef;
+var fixture = new b2FixtureDef;
 
 
 var BackgroundImage = null;
@@ -74,7 +74,7 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 3, 0, 0, 0, 0, 1], 
-		 [1, 4, 4, 4, 4, 4, 4, 4, 4, 1]
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		],
 
 		[
@@ -87,10 +87,10 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 3, 0, 0, 0, 2, 0, 2, 1], 
-		 [1, 0, 4, 0, 2, 0, 2, 0, 2, 1], 
-		 [1, 0, 0, 0, 2, 0, 4, 4, 4, 1], 
+		 [1, 0, 1, 0, 2, 0, 2, 0, 2, 1], 
+		 [1, 0, 0, 0, 2, 0, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 2, 0, 0, 0, 0, 1], 
-		 [1, 0, 0, 0, 4, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -103,16 +103,16 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 3, 0, 0, 0, 0, 1], 
-		 [1, 0, 0, 0, 4, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 3, 0, 0, 0, 2, 0, 2, 1], 
-		 [1, 0, 4, 0, 0, 0, 2, 0, 2, 1], 
-		 [1, 0, 0, 0, 0, 0, 4, 4, 4, 1], 
+		 [1, 0, 1, 0, 0, 0, 2, 0, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, -1, 0, 0, 1], 
-		 [1, 1, 1, 4, 4, 4, 1, 1, 1, 1]
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		],
 
 		[
@@ -126,12 +126,12 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 2, 0, 2, 1], 
 		 [1, 0, 0, 0, 2, 0, 2, 0, 2, 1], 
-		 [1, 0, 0, 0, 2, 0, 4, 4, 4, 1], 
+		 [1, 0, 0, 0, 2, 0, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 2, 0, 0, 0, 0, 1], 
-		 [1, 0, 3, 0, 4, 0, 0, 0, 0, 1], 
+		 [1, 0, 3, 0, 1, 0, 0, 0, 0, 1], 
 		 [1, 0, 2, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 2, 0, 0, 0, 0, 0, 0, 1], 
-		 [1, 4, 4, 4, 4, 4, 4, 4, 4, 1]
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		]
 		,
 
@@ -145,10 +145,10 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 3, 0, 0, 0, 0, 0, 2, 1], 
-		 [1, 4, 4, 0, 0, 0, 0, 3, 2, 1], 
-		 [1, 0, 0, 0, 0, 0, 4, 4, 4, 1], 
+		 [1, 1, 1, 0, 0, 0, 0, 3, 2, 1], 
+		 [1, 0, 0, 0, 0, 0, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 2, 0, 0, 0, 0, 1], 
-		 [1, 0, 0, 0, 4, 0, 0, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 3, 3, 3, 3, 3, 3, 0, 0, 1], 
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -160,29 +160,29 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, -1, 1], 
 		 [1, 0, 0, 0, 2, 0, 0, 0, 0, 1], 
-		 [1, 0, 0, 0, 4, 4, 1, 1, 1, 1], 
+		 [1, 0, 0, 0, 1, 1, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 3, 0, 0, 0, 0, 0, 2, 1], 
-		 [1, 4, 4, 0, 0, 0, 0, 3, 2, 1], 
+		 [1, 1, 1, 0, 0, 0, 0, 3, 2, 1], 
 		 [1, 0, 0, 0, 2, 0, 1, 1, 1, 1], 
 		 [1, 0, 0, 0, 2, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 3, 3, 2, 2, 3, 3, 0, 0, 1], 
-		 [1, 4, 4, 4, 4, 1, 1, 1, 1, 1]
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		],
 		[
 		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
 		 [1, 0, 1, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 1, 0, 3, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 1, 0, 0, 0, 0, 1], 
-		 [1, 0, 0, 0, 1, 4, 4, 0, 0, 1], 
+		 [1, 0, 0, 0, 1, 1, 1, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
-		 [1, 4, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 3, 0, 0, 0, 0, 0, 0, 0, 1], 
-		 [1, 4, 0, 0, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, -1, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
@@ -216,7 +216,7 @@ const Levels = new Array (
 		 [1, 2, 0, 2, 0, 0, 0, 0, 0, 1], 
 		 [1, 2, 0, 2, 0, 0, 0, -1, 0, 1], 
 		 [1, 2, 0, 2, 0, 0, 0, 0, 0, 1], 
-		 [1, 4, 4, 4, 0, 0, 0, 0, 0, 1], 
+		 [1, 1, 1, 1, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 3, 3, 3, 1], 
 		 [1, 0, 0, 0, 0, 0, 2, 2, 2, 1], 
@@ -241,7 +241,7 @@ const Levels = new Array (
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
 		 [1, 0, -1, 0, 0,0, 0, 0, 0, 1], 
-		 [1, 4, 4, 4, 4, 4, 4, 4, 1, 1]
+		 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		]
 		
 );
@@ -249,9 +249,8 @@ const Levels = new Array (
 var gameObjects = new Array (
 			{
 				type : "wall",
-				group : "background",
+				description : "wall",
 				imgsrc : "images/1.png",
-				shape : "PolygonShape",
 				imgObj :  null,
 				imgsize : 30,
 				bodysize : null,
@@ -262,9 +261,8 @@ var gameObjects = new Array (
 			},
 			{
 				type : "block",
-				group : "object",
+				description : "block",
 				imgsrc : "images/2.png",
-				shape : "PolygonShape",
 				imgObj : null,				
 				imgsize : 30,
 				bodysize : null,
@@ -275,30 +273,17 @@ var gameObjects = new Array (
 			},
 			{
 				type : "star",
-				group : "object",
+				description : "star",
 				imgsrc : "images/3.png",
-				shape : "PolygonShape",
 				imgObj : null,
-				imgsize : 30,
-				bodysize : null,
-				density:0,
-				friction: 0.1,
-				restitution: 0.1,
-				dynamic : true
-			},
-			{
-				type : "floor",
-				group : "background",
-				imgsrc : "images/3.1_30x30.png",
-				shape : "PolygonShape",
-				imgObj :  null,
 				imgsize : 30,
 				bodysize : null,
 				density:10,
 				friction: 0.5,
-				restitution: 0.2,
-				dynamic : false
-			}
+				restitution: 0.9,
+				dynamic : true
+			}			
+
 			);
 
 //////////////////////
@@ -404,7 +389,7 @@ function init() {
 		}
 	}
 
-	function createBackground() {
+	function createBackground(wallImage) {
 		var node = world.GetBodyList();
 		context.fillStyle = '#aaFFaa';
 		context.fillRect(0, 0, 300, 16*30);
@@ -412,17 +397,14 @@ function init() {
 			var b = node;
 			node = node.GetNext();
 			if(b.m_userData)
-				switch (b.m_userData.group) {
-					case "background":
+				switch (b.m_userData.type) {
+					case "wall":
 						context.save();
 						var x = b.m_userData.bodysize[0] * 30;
 						var y = b.m_userData.bodysize[1] * 30;
 						var w = b.m_userData.bodysize[2] * 30;
 						var h = b.m_userData.bodysize[3] * 30;
-						
-						var imgObj = new Image();
-						imgObj.src = b.m_userData.imgsrc;
-						context.drawImage(imgObj, (x - w), (y - h));
+						context.drawImage(wallImage, (x - w), (y - h));
 						context.restore();
 					break;
 				}
@@ -445,8 +427,8 @@ function init() {
 		ballImage = new Image();
 		ballImage=initImage;
 
-		var image = new Image(); 
-		//var image = document.createElement('img');
+		//var image = new Image(); 
+		var image = document.createElement('img');
 		
 		//image.crossOrigin = 'anonymous'; 
 		// image.onload = function(e) {
@@ -454,22 +436,35 @@ function init() {
 			return image;
 		//}
 	}
-
+/*	
+	var wallImage = new Image();
+	wallImage.src = "images/1.png";
+*/
 	initImage.src = "images/emotion.png";
-	console.log(imagesToLoad);
 
 	var imagesToLoad = {}; //declare object
-	var i=0;
-	for(var loadTheseImages in gameObjects) {
-		//console.log(gameObjects[i]);
-		imagesToLoad[i]=gameObjects[i].imgsrc;
-		i++;
-	}
+
+    for (var i = 0; i < 3; i++) {
+    	var index = i+1;
+    	var im='images/'+index+'.png';
+    	imagesToLoad[i]=im;
+    	//console.log(gameObjects[i]);
+
+
+    }
 
 	loadImages(imagesToLoad, function() {
-		BackgroundImage = createBackground();
+		var wallImage = gameObjects[0].imgObj;
+		BackgroundImage = createBackground(wallImage);
 	});
 
+
+
+	fixture.density = 10;
+	fixture.friction = 0.5;
+	fixture.restitution = 0.9;
+
+	fixture.shape = new b2PolygonShape;
 
 	debugDraw.SetSprite(canvasDebug.getContext("2d"));
 	debugDraw.SetDrawScale(30);
@@ -501,7 +496,7 @@ function createLevel(level) {
 	    return copy;
 	}	
 	
-	var fixture = new b2FixtureDef;
+			
 	for(var i = 0; i < level.length; i++) {
 		for(var j = 0; j < level[i].length; j++) {
 			if (level[i][j]>0) {
@@ -510,19 +505,8 @@ function createLevel(level) {
 					wallDef.type = b2Body.b2_dynamicBody;
 				else
 					wallDef.type = b2Body.b2_staticBody;
-				if (gameObjects[level[i][j]-1].shape=="PolygonShape")
-					fixture.shape = new b2PolygonShape;
-
-
 				wallDef.position.Set(j+.5, i+.5);
 				fixture.shape.SetAsBox(.5, .5);
-				
-
-				fixture.density = gameObjects[level[i][j]-1].density;
-				fixture.friction = gameObjects[level[i][j]-1].friction;
-				fixture.restitution = gameObjects[level[i][j]-1].restitution;
-					
-				
 
 				var a = new Array(j+.5, i+.5, .5, .5);
 				
@@ -530,9 +514,16 @@ function createLevel(level) {
 				NewData.bodysize = a.slice(0);
 				wallDef.userData = NewData;
 
+/*
+				var NewData = new Object();
+				NewData = eval(uneval(gameObjects[level[i][j]-1]));
+				NewData.bodysize = a.slice(0);
+				wallDef.userData = NewData;
+*/
 
 				var wall = world.CreateBody(wallDef);
 				wall.CreateFixture(fixture);
+				//walls.push(wall);
 			}
 		}
 	}
@@ -550,7 +541,7 @@ function loop() {
 
 		world.Step(1 / FPS, 10, 10);
 		// Avanzamos la escena
-		context.clearRect(0,0,canvasDebug.width, canvasDebug.height);
+
 		if(debug)
 			world.DrawDebugData();
 		else 
@@ -609,12 +600,12 @@ function loop() {
 
 					break;
 				}
-				// if (b.m_userData.type=="star" || b.m_userData.type=="ball" || b.m_userData.type=="block") {
-					if (b.m_userData.group== "object" || b.m_userData.type=="ball") {
+				if (b.m_userData.type=="star" || b.m_userData.type=="ball" || b.m_userData.type=="block") {
+									
 						var position = b.GetPosition();
 
-						//var imgObj = new Image();
-						//imgObj.src = b.m_userData.imgsrc;
+						var imgObj = new Image();
+						imgObj.src = b.m_userData.imgsrc;
 
 						if (!debug) {
 							context.save();
